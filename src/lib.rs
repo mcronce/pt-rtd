@@ -12,6 +12,8 @@
 //! The correctional polynomials for PT200 and PT500 are not yet implemented, temperature 
 //! calculations for these below 0°C will be wrong.
 
+use core::fmt;
+
 use libm::{
     powf,
     sqrtf,
@@ -134,6 +136,17 @@ pub enum Error {
     OutOfBounds,
     NonexistentType,
 }
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::OutOfBounds => f.write_str("Temperature out of bounds"),
+            Self::NonexistentType => f.write_str("RTD type is unsupported")
+        }
+    }
+}
+
+impl core::error::Error for Error {}
 
 #[cfg(test)]
 mod tests {
